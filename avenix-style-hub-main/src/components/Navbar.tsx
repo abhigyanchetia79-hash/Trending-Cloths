@@ -65,12 +65,11 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-          {isAdmin && (
+          {isAdmin ? (
             <Link to="/admin" className="p-2 text-foreground/60 hover:text-foreground transition-colors hidden md:block" title="Admin Dashboard">
               <Shield size={20} />
             </Link>
-          )}
-          {showAdminLogin && !isAdmin && !user && (
+          ) : (
             <Link to="/admin/auth" className="p-2 text-foreground/60 hover:text-foreground transition-colors hidden md:block" title="Admin Login">
               <Shield size={20} />
             </Link>
@@ -107,12 +106,11 @@ const Navbar = () => {
               <Link to={user ? "/profile" : "/auth"} className="text-sm font-medium tracking-[0.15em] uppercase text-foreground/70 hover:text-foreground py-1" onClick={() => setMobileOpen(false)}>
                 {user ? "Profile" : "Sign In"}
               </Link>
-              {isAdmin && (
+              {isAdmin ? (
                 <Link to="/admin" className="text-sm font-medium tracking-[0.15em] uppercase text-foreground/70 hover:text-foreground py-1" onClick={() => setMobileOpen(false)}>
                   Admin
                 </Link>
-              )}
-              {showAdminLogin && !isAdmin && !user && (
+              ) : (
                 <Link to="/admin/auth" className="text-sm font-medium tracking-[0.15em] uppercase text-foreground/70 hover:text-foreground py-1" onClick={() => setMobileOpen(false)}>
                   Admin Login
                 </Link>
