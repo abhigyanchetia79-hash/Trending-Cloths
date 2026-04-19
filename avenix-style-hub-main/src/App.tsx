@@ -22,7 +22,14 @@ import AdminPage from "./pages/AdminPage";
 import AdminAuthPage from "./pages/AdminAuthPage";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30000,
+    },
+  },
+});
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -52,10 +59,10 @@ const App = () => (
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
-            <DatabaseInitializer />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <DatabaseInitializer />
+              <Toaster />
+              <Sonner />
               <AnimatedRoutes />
             </BrowserRouter>
           </WishlistProvider>

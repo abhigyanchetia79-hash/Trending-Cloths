@@ -1,0 +1,83 @@
+Fix and optimize my ecommerce website project "Trending Cloths" so it runs smoothly without errors.
+
+🎯 GOAL:
+- Make the website fully working in Replit preview
+- Fix all errors (build, console, routing, images, API, etc.)
+- Ensure fast loading and clean UI
+
+--------------------------------------------------
+
+🔍 1. DEBUG & FIX ERRORS:
+- Scan entire project for errors
+- Fix all JavaScript errors
+- Fix broken imports or missing files
+- Resolve dependency issues in package.json
+- Ensure project runs without crashing
+
+--------------------------------------------------
+
+⚙️ 2. BUILD & RUN SETUP:
+- Ensure correct start command (npm run dev or npm start)
+- Install all dependencies automatically
+- Fix any missing modules
+- Ensure project runs in Replit preview
+
+--------------------------------------------------
+
+📦 3. PACKAGE.JSON FIX:
+- Ensure scripts exist:
+  - "dev"
+  - "build"
+  - "preview"
+- Add missing dependencies if needed
+- Fix version conflicts
+
+--------------------------------------------------
+
+🌐 4. ROUTING FIX (IMPORTANT):
+- If using React Router:
+  - Ensure proper routing setup
+  - Prevent blank page issue
+  - Add fallback for all routes
+
+--------------------------------------------------
+
+🖼 5. IMAGE & ASSET FIX:
+- Fix broken image paths
+- Ensure images load correctly
+- Replace invalid paths with working ones
+
+--------------------------------------------------
+
+📁 6. FILE STRUCTURE CHECK:
+- Ensure correct folder structure:
+  - src/
+  - public/
+- Fix incorrect imports
+
+--------------------------------------------------
+
+⚡ 7. PERFORMANCE:
+- Optimize loading speed
+- Remove unnecessary code
+- Fix slow components
+
+--------------------------------------------------
+
+🐞 8. CONSOLE CLEAN:
+- Remove all red errors
+- Handle warnings properly
+
+--------------------------------------------------
+
+📱 9. MOBILE SUPPORT:
+- Ensure responsive layout works
+- Fix UI breaking on small screens
+
+--------------------------------------------------
+
+🎯 FINAL RESULT:
+- Website loads without white screen
+- No console errors
+- All pages, products, images work correctly
+- Smooth performance in Replit preview

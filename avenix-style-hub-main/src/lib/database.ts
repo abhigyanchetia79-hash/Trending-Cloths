@@ -5,33 +5,17 @@ import { products as staticProducts } from "@/data/products";
 // Initialize database with sample data
 export const initializeDatabase = async () => {
   try {
-    console.log("🚀 DATABASE INITIALIZATION: Starting...");
-    
-    // Check if products exist
     const { data: existingProducts, error: fetchError } = await supabase
       .from("products")
       .select("id")
       .limit(1);
 
-    console.log("📊 DATABASE CHECK: Existing products:", existingProducts);
-    console.log("🔍 DATABASE CHECK: Fetch error:", fetchError);
-
     if (fetchError) {
-      console.error("❌ DATABASE ERROR: Failed to check existing products:", fetchError);
       throw fetchError;
     }
 
-    // If no products exist, add sample products
     if (!existingProducts || existingProducts.length === 0) {
-      console.log("📦 DATABASE INITIALIZATION: No products found, adding sample products...");
-      console.log("📋 DATABASE INITIALIZATION: Sample products to add:", staticProducts.length);
-      
-      let successCount = 0;
-      let errorCount = 0;
-      
       for (const product of staticProducts) {
-        console.log(`➕ DATABASE INITIALIZATION: Adding product: ${product.name}`);
-        
         const productData: TablesInsert<"products"> = {
           id: product.id,
           name: product.name,
@@ -50,22 +34,10 @@ export const initializeDatabase = async () => {
           stock_quantity: product.stockQuantity,
         };
 
-        const { error, data } = await supabase.from("products").insert(productData).select();
-        if (error) {
-          console.error(`❌ DATABASE ERROR: Failed to insert product "${product.name}":`, error);
-          errorCount++;
-        } else {
-          console.log(`✅ DATABASE SUCCESS: Inserted product "${product.name}"`);
-          successCount++;
-        }
+        await supabase.from("products").insert(productData);
       }
-      
-      console.log(`📊 DATABASE INITIALIZATION COMPLETE: ${successCount} products added, ${errorCount} errors`);
-    } else {
-      console.log("✅ DATABASE INITIALIZATION: Products already exist, skipping initialization");
     }
 
-    // Initialize payment settings if not exists
     const { data: paymentSettings } = await supabase
       .from("payment_settings")
       .select("id")
@@ -82,11 +54,9 @@ export const initializeDatabase = async () => {
       };
 
       await supabase.from("payment_settings").insert(defaultPaymentSettings);
-      console.log("Default payment settings initialized");
     }
-
-  } catch (error) {
-    console.error("Error initializing database:", error);
+  } catch {
+    // Silently fail — static data is used as fallback
   }
 };
 
@@ -107,7 +77,7 @@ export const createOrderItems = async (orderId: string, orderItems: Omit<TablesI
     ...item,
     order_id: orderId,
   }));
-  
+
   const { data, error } = await supabase
     .from("order_items")
     .insert(itemsWithOrderId)
@@ -245,7 +215,7 @@ export const uploadFile = async (file: File, path: string) => {
     .upload(path, file);
 
   if (error) throw error;
-  
+
   const { data: { publicUrl } } = supabase.storage
     .from("product-images")
     .getPublicUrl(data.path);

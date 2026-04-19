@@ -36,27 +36,24 @@ const AdminPage = () => {
   const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ["admin-users"],
     queryFn: async () => {
-      // Get all users from auth
-      const { data: { users: authUsers }, error: authError } = await supabase.auth.admin.listUsers();
-      if (authError) throw authError;
+      // Fetch profiles (publicly readable)
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("user_id, name, email, created_at");
+      if (profilesError) throw profilesError;
 
       // Get user roles
       const { data: roles, error: rolesError } = await supabase.from("user_roles").select("user_id, role");
       if (rolesError) throw rolesError;
 
-      // Get user profiles
-      const { data: profiles, error: profilesError } = await supabase.from("profiles").select("user_id, name");
-      if (profilesError) throw profilesError;
-
       const roleMap = new Map(roles?.map((r) => [r.user_id, r.role]) || []);
-      const profileMap = new Map(profiles?.map((p) => [p.user_id, p.name]) || []);
 
-      return (authUsers || []).map((u) => ({
-        id: u.id,
-        email: u.email || "N/A",
-        name: profileMap.get(u.id) || "Unknown",
-        role: roleMap.get(u.id) || "customer",
-        createdAt: u.created_at,
+      return (profiles || []).map((p) => ({
+        id: p.user_id,
+        email: (p as any).email || "N/A",
+        name: p.name || "Unknown",
+        role: roleMap.get(p.user_id) || "customer",
+        createdAt: (p as any).created_at || new Date().toISOString(),
       }));
     },
     enabled: isAdmin,
@@ -118,14 +115,14 @@ const AdminPage = () => {
 
     setDeletingUserId(userId);
     try {
-      // Delete user from auth
-      const { error } = await supabase.auth.admin.deleteUser(userId);
-      if (error) throw error;
+      // Remove user profile and roles from DB
+      await supabase.from("user_roles").delete().eq("user_id", userId);
+      await supabase.from("profiles").delete().eq("user_id", userId);
 
-      toast.success(`User ${userEmail} deleted successfully`);
+      toast.success(`User ${userEmail} removed successfully`);
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     } catch (err: any) {
-      toast.error(err.message || "Failed to delete user");
+      toast.error(err.message || "Failed to remove user");
     } finally {
       setDeletingUserId(null);
     }

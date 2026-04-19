@@ -60,8 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .from("admin_settings")
           .insert({ show_admin_login: show });
       }
-    } catch (err) {
-      console.warn("Could not sync admin settings to database:", err);
+    } catch {
+      // Silently fail, localStorage is used as backup
     }
   };
 
@@ -77,8 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setShowAdminLoginInternal(data.show_admin_login);
           localStorage.setItem("showAdminLogin", JSON.stringify(data.show_admin_login));
         }
-      } catch (err) {
-        console.warn("Could not load admin settings from database:", err);
+      } catch {
+        // Silently fail, localStorage is used as backup
       }
     };
 

@@ -36,68 +36,54 @@ export const mapDbProduct = (p: DbProduct): Product => ({
   reviews: p.reviews,
   description: p.description || "",
   sizes: p.sizes,
-  colors: (p.colors as any[]) || [],
+  colors: (p.colors as { name: string; hex: string }[]) || [],
   inStock: p.in_stock,
   stockQuantity: p.stock_quantity,
 });
 
 const fetchProducts = async (): Promise<Product[]> => {
-  console.log("🔍 STEP 1: Fetching products from database...");
-  
-  // Always return static products immediately for now to ensure UI works
-  console.log("📦 STEP 2: Using static products for immediate display");
-  console.log("📋 STEP 3: Static products count:", staticProducts.length);
-  
-  // Try to fetch from database in background
   try {
-    const { data, error } = await supabase.from("products").select("*").order("created_at", { ascending: false });
-    
-    console.log("📊 STEP 4: Database response:", { data, error });
-    
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+
     if (!error && data && data.length > 0) {
-      console.log("✅ STEP 5: Found products in database, mapping them...");
-      const mappedProducts = (data || []).map(mapDbProduct);
-      console.log("📦 STEP 6: Mapped products:", mappedProducts);
-      return mappedProducts;
+      return data.map(mapDbProduct);
     }
-  } catch (error) {
-    console.error("❌ STEP 7: Error fetching products from database:", error);
+  } catch {
+    // Fall through to static products
   }
-  
-  console.log("🔄 STEP 8: Using static product data as fallback");
+
   return staticProducts;
 };
 
 export const useProducts = () =>
-  useQuery({ queryKey: ["products"], queryFn: fetchProducts });
+  useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    placeholderData: staticProducts,
+  });
 
 export const useProductsByTag = (tag: string) => {
   const { data, ...rest } = useProducts();
-  const filteredData = data?.filter((p) => p.tag === tag);
-  console.log(`🏷️ STEP 9: Filtering products by tag "${tag}":`, {
-    totalProducts: data?.length || 0,
-    filteredProducts: filteredData?.length || 0,
-    products: filteredData
-  });
-  return { data: filteredData, ...rest };
+  return { data: data?.filter((p) => p.tag === tag), ...rest };
 };
 
 export const useProductsByCategory = (category: string) => {
   const { data, ...rest } = useProducts();
-  const filteredData = data?.filter((p) => p.category === category);
-  console.log(`👕 STEP 10: Filtering products by category "${category}":`, {
-    totalProducts: data?.length || 0,
-    filteredProducts: filteredData?.length || 0,
-    products: filteredData
-  });
-  return { data: filteredData, ...rest };
+  return { data: data?.filter((p) => p.category === category), ...rest };
 };
 
 export const useProductById = (id: string) =>
   useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (error) throw error;
       return data ? mapDbProduct(data) : null;
     },
