@@ -6,7 +6,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import OptimizedImageUpload from "@/components/OptimizedImageUpload";
 import type { Product } from "@/hooks/useProducts";
+import type { UploadResult } from "@/lib/storage";
 
 interface Props {
   product: Product | null;
@@ -35,13 +37,13 @@ const ALL_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36
 const AdminProductForm = ({ product, onClose }: Props) => {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(product?.name || "");
   const [price, setPrice] = useState(product?.price?.toString() || "");
   const [originalPrice, setOriginalPrice] = useState(product?.originalPrice?.toString() || "");
   const [image, setImage] = useState(product?.image || "");
+  const [imagePath, setImagePath] = useState<string | null>(null);
   const [description, setDescription] = useState(product?.description || "");
   const [category, setCategory] = useState(product?.category || "men");
   const [tag, setTag] = useState(product?.tag || "");
@@ -66,41 +68,14 @@ const AdminProductForm = ({ product, onClose }: Props) => {
     );
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageUploaded = (result: UploadResult) => {
+    setImage(result.url);
+    setImagePath(result.path);
+  };
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Only JPG, PNG, and WebP images are allowed");
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be under 5MB");
-      return;
-    }
-
-    setUploading(true);
-    const ext = file.name.split(".").pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-
-    try {
-      const { error } = await supabase.storage
-        .from("product-images")
-        .upload(fileName, file, { cacheControl: "3600", upsert: false });
-      if (error) throw error;
-
-      const { data: urlData } = supabase.storage
-        .from("product-images")
-        .getPublicUrl(fileName);
-
-      setImage(urlData.publicUrl);
-      toast.success("Image uploaded!");
-    } catch (err: any) {
-      toast.error(err.message || "Upload failed");
-    } finally {
-      setUploading(false);
-    }
+  const handleImageRemoved = () => {
+    setImage("");
+    setImagePath(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -164,64 +139,17 @@ const AdminProductForm = ({ product, onClose }: Props) => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Image Upload - Prominent */}
-        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+        {/* Image Upload - Optimized */}
+        <div>
           <Label className="text-xs uppercase tracking-wider mb-3 block">Product Image *</Label>
-          {image ? (
-            <div className="flex flex-col items-center gap-3">
-              <img src={image} alt="Preview" className="w-32 h-40 object-cover rounded-sm border border-border" />
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                  className="flex items-center gap-2 px-4 py-2 border border-border text-xs hover:bg-secondary transition-colors disabled:opacity-50"
-                >
-                  {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
-                  Change Image
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setImage("")}
-                  className="flex items-center gap-2 px-4 py-2 border border-border text-xs text-destructive hover:bg-secondary transition-colors"
-                >
-                  <Trash2 size={14} /> Remove
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
-              className="flex flex-col items-center gap-2 mx-auto py-6 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {uploading ? (
-                <Loader2 size={32} className="animate-spin" />
-              ) : (
-                <Upload size={32} />
-              )}
-              <span className="text-sm font-medium">
-                {uploading ? "Uploading..." : "Click to upload image"}
-              </span>
-              <span className="text-xs text-muted-foreground">JPG, PNG or WebP (max 5MB)</span>
-            </button>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handleImageUpload}
-            className="hidden"
+          <OptimizedImageUpload
+            onImageUploaded={handleImageUploaded}
+            onImageRemoved={handleImageRemoved}
+            currentImageUrl={image}
+            currentImagePath={imagePath}
+            maxSizeMB={2}
+            acceptedFormats={['jpg', 'jpeg', 'png', 'webp']}
           />
-          <div className="mt-3">
-            <Input
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder="Or paste image URL here"
-              className="text-xs"
-            />
-          </div>
         </div>
 
         {/* Basic Info */}
