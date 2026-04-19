@@ -1,0 +1,95 @@
+Restore my ecommerce website "Trending Cloths" to its previous working state before recent changes were made by AI.
+
+🎯 GOAL:
+- Revert unwanted changes made automatically
+- Restore original structure, UI, and features
+- Fix all errors without changing design or layout
+
+--------------------------------------------------
+
+🔁 1. RESTORE PREVIOUS VERSION:
+- Compare current files with previous working state
+- Undo recent unwanted modifications
+- Restore:
+  - Homepage layout
+  - Hero section video
+  - Product listings
+  - Men/Women collections
+
+--------------------------------------------------
+
+⚙️ 2. ADMIN PANEL RESTORE:
+- Restore full admin panel functionality:
+  - Add product
+  - Edit product
+  - Delete product
+  - Upload product image
+  - Manage stock and price
+
+--------------------------------------------------
+
+🛍 3. PRODUCT SYSTEM:
+- Ensure products load correctly from database
+- Fix any broken product rendering
+- Restore product cards UI
+
+--------------------------------------------------
+
+👤 4. USER FEATURES:
+- Restore:
+  - Login/signup
+  - Cart
+  - Wishlist
+  - Order tracking
+
+--------------------------------------------------
+
+💳 5. PAYMENT SYSTEM:
+- Restore payment options (UPI, card, etc.)
+- Ensure checkout works correctly
+
+--------------------------------------------------
+
+🎥 6. HERO SECTION:
+- Ensure hero video works as before
+- Do not replace with image unless video fails
+
+--------------------------------------------------
+
+🐞 7. FIX ALL ERRORS:
+- Fix JavaScript errors
+- Fix broken imports
+- Fix missing files
+- Fix routing issues
+- Remove console errors
+
+--------------------------------------------------
+
+📁 8. FILE STRUCTURE:
+- Restore correct folder structure:
+  - src/
+  - public/
+  - components/
+- Remove duplicate or unnecessary files
+
+--------------------------------------------------
+
+⚡ 9. PERFORMANCE:
+- Ensure fast loading
+- Remove broken or unused code
+
+--------------------------------------------------
+
+🚫 IMPORTANT RULE:
+- DO NOT redesign UI
+- DO NOT change layout
+- DO NOT remove features
+- ONLY restore and fix
+
+--------------------------------------------------
+
+🎯 FINAL RESULT:
+- Website looks exactly like before
+- All features working (admin, products, payment, etc.)
+- No errors
+- Smooth performance
