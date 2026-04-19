@@ -1,7 +1,36 @@
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import heroBanner from "@/assets/hero-banner.jpg";
 
 const HeroSection = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const tryPlay = () => {
+      video.muted = true;
+      video.play().catch(() => {
+        // Retry once after a short delay
+        setTimeout(() => {
+          video.play().catch(() => setVideoFailed(true));
+        }, 500);
+      });
+    };
+
+    // Force play as soon as enough data is buffered
+    video.addEventListener("canplay", tryPlay);
+
+    // Also try immediately in case already buffered
+    tryPlay();
+
+    return () => {
+      video.removeEventListener("canplay", tryPlay);
+    };
+  }, []);
+
   const scrollToProducts = () => {
     const el = document.getElementById("products-section");
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -10,23 +39,32 @@ const HeroSection = () => {
   return (
     <section className="relative w-full h-[90vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster={heroBanner}
-        >
-          <source src="/video/hero.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {/* Fallback image — only shown if video completely fails */}
         <img
           src={heroBanner}
           alt="Premium fashion"
-          className="absolute inset-0 w-full h-full object-cover md:hidden"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            videoFailed ? "opacity-100" : "opacity-0"
+          }`}
         />
+
+        {/* Hero video — always rendered, always attempted */}
+        {!videoFailed && (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={heroBanner}
+            onError={() => setVideoFailed(true)}
+          >
+            <source src="/video/hero.mp4" type="video/mp4" />
+          </video>
+        )}
+
         <div className="absolute inset-0 bg-black/40" />
       </div>
 

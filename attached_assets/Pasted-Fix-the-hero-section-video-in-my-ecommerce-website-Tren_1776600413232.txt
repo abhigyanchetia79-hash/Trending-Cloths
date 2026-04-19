@@ -1,0 +1,100 @@
+Fix the hero section video in my ecommerce website "Trending Cloths" so it ALWAYS plays reliably and is fully visible on both desktop and mobile devices.
+
+🎯 GOAL:
+- Video must autoplay every time
+- No random failures
+- Fully visible and responsive on mobile
+- Smooth premium experience
+
+--------------------------------------------------
+
+🔍 1. DEBUG & FIX ISSUES:
+- Check for any console errors related to video
+- Fix incorrect paths or loading issues
+- Ensure video file is accessible
+
+--------------------------------------------------
+
+🎥 2. FORCE AUTOPLAY (VERY IMPORTANT):
+Ensure video has:
+- autoplay
+- muted
+- loop
+- playsInline
+
+Example:
+<video autoplay muted loop playsinline preload="auto">
+
+--------------------------------------------------
+
+⚡ 3. FORCE PLAY WITH JS (ANTI-FAIL):
+const video = document.querySelector("video");
+if (video) {
+  video.play().catch(() => {
+    video.muted = true;
+    video.play();
+  });
+}
+
+--------------------------------------------------
+
+🧠 4. HANDLE LOADING DELAY:
+video.addEventListener("canplay", () => {
+  video.play();
+});
+
+--------------------------------------------------
+
+🔁 5. RETRY SYSTEM (IMPORTANT):
+setTimeout(() => {
+  video.play().catch(() => {});
+}, 1000);
+
+--------------------------------------------------
+
+📱 6. MOBILE VISIBILITY FIX (VERY IMPORTANT):
+- Ensure video is visible on mobile screens
+- Fix CSS:
+
+video {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+- Ensure no overflow hidden issues
+- Ensure no element hides the video
+
+--------------------------------------------------
+
+📱 7. MOBILE AUTOPLAY SUPPORT:
+- muted = true (required)
+- playsInline = true (required)
+- Remove any controls blocking autoplay
+
+--------------------------------------------------
+
+🎨 8. RESPONSIVE DESIGN:
+- Ensure video scales correctly on all devices
+- Maintain aspect ratio
+- No cropping issues
+
+--------------------------------------------------
+
+🐞 9. REMOVE CONFLICTS:
+- Ensure no JS pauses video
+- Remove unnecessary event listeners
+
+--------------------------------------------------
+
+⚡ 10. PERFORMANCE:
+- Ensure video size is optimized (<5MB)
+- Use mp4 format (H.264)
+
+--------------------------------------------------
+
+🎯 FINAL RESULT:
+- Video plays every time (no randomness)
+- Fully visible on mobile and desktop
+- Smooth, premium hero section
+- No fallback image unless video completely fails
