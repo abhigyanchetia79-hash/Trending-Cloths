@@ -17,7 +17,7 @@ const AdminAuthPage = () => {
   const [name, setName] = useState("");
   const [secretCode, setSecretCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already admin
@@ -30,9 +30,10 @@ const AdminAuthPage = () => {
     setLoading(true);
     try {
       if (isLogin) {
-        await signIn(email, password);
-        // Check if user is admin
-        const { data: { user } } = await supabase.auth.getUser();
+        // Sign in and get user in one call — no redundant getUser() round trip
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        const user = data.user;
         if (user) {
           const { data: roles } = await supabase
             .from("user_roles")
@@ -60,12 +61,10 @@ const AdminAuthPage = () => {
         });
         if (error) throw error;
         if (data.user) {
-          // Assign admin role
           const { error: roleError } = await supabase
             .from("user_roles")
             .insert({ user_id: data.user.id, role: "admin" });
           if (roleError) {
-            console.error("Role assignment error:", roleError);
             toast.error("Account created but role assignment failed. Contact support.");
           } else {
             toast.success("Admin account created! You can now sign in.");

@@ -83,12 +83,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
           setTimeout(() => checkAdmin(session.user.id), 0);
-          await loadAdminSettings();
         } else {
           setIsAdmin(false);
         }
@@ -96,12 +95,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         checkAdmin(session.user.id);
-        await loadAdminSettings();
       }
       setLoading(false);
     });
