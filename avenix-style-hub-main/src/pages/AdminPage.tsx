@@ -16,6 +16,7 @@ import AdminProductForm from "@/components/AdminProductForm";
 import AdminPaymentSettings from "@/components/AdminPaymentSettings";
 import AdminAdvertisementManager from "@/components/AdminAdvertisementManager";
 import AdminReviewManager from "@/components/AdminReviewManager";
+import AdminSocialSettings from "@/components/AdminSocialSettings";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Order = Tables<"orders"> & { customer_name?: string };
@@ -484,6 +485,9 @@ const AdminPage = () => {
                 </p>
               </div>
             </motion.div>
+
+            {/* Social & Customer Service Settings */}
+            <AdminSocialSettings />
 
             {/* Payment Settings */}
             <AdminPaymentSettings />

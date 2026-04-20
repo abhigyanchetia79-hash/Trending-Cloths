@@ -1,0 +1,113 @@
+Add a complete Social Media + Customer Service system to my ecommerce website "Trending Cloths" where ALL links and settings are fully controlled from the admin panel.
+
+🎯 GOAL:
+- Admin controls WhatsApp, Instagram, Facebook links
+- Customer Service button connects to WhatsApp
+- No hardcoded links in frontend
+- Professional, dynamic system like top ecommerce brands
+
+--------------------------------------------------
+
+🔧 1. ADMIN PANEL SECTION:
+Create a section:
+
+"Social & Customer Service Settings"
+
+Fields:
+- WhatsApp Number → default: 918011319101
+- Default Customer Message → "Hello, I need help regarding a product"
+- Instagram URL
+- Facebook URL
+
+Buttons:
+- Save / Update
+- Reset (optional)
+
+--------------------------------------------------
+
+📦 2. DATA STORAGE:
+Store all values in database (or JSON/local storage if no backend):
+
+{
+  "whatsapp": "918011319101",
+  "message": "Hello, I need help regarding a product",
+  "instagram": "https://instagram.com/yourpage",
+  "facebook": "https://facebook.com/yourpage"
+}
+
+--------------------------------------------------
+
+🔗 3. DYNAMIC LINK GENERATION:
+
+WhatsApp:
+https://wa.me/{number}?text={encoded_message}
+
+Example:
+https://wa.me/918011319101?text=Hello%20I%20need%20help
+
+Instagram:
+Use stored URL
+
+Facebook:
+Use stored URL
+
+--------------------------------------------------
+
+💬 4. CUSTOMER SERVICE BUTTON:
+Add "Customer Service" button in:
+- Navbar (top right)
+- Footer
+- Optional floating button (bottom-right)
+
+On click:
+- Open WhatsApp chat with owner
+- Open in new tab
+
+--------------------------------------------------
+
+🎨 5. SOCIAL MEDIA ICONS:
+Add icons in:
+- Navbar
+- Footer
+
+Icons:
+- WhatsApp
+- Instagram
+- Facebook
+
+Each icon should open dynamic link from admin panel
+
+--------------------------------------------------
+
+📱 6. MOBILE OPTIMIZATION:
+- Ensure buttons/icons visible on mobile
+- Add floating WhatsApp chat button
+- Ensure responsive layout
+
+--------------------------------------------------
+
+🔐 7. VALIDATION:
+- WhatsApp number must be digits only (no +, no spaces)
+- URLs must start with https://
+
+--------------------------------------------------
+
+🐞 8. ERROR HANDLING:
+- If any link is empty → hide that icon/button
+- Prevent broken links
+
+--------------------------------------------------
+
+⚡ 9. AUTO MESSAGE (OPTIONAL ADVANCED):
+- When user clicks from product page:
+  Include product name in message:
+  "Hi, I have a question about [Product Name]"
+
+--------------------------------------------------
+
+🎯 FINAL RESULT:
+- Admin controls all links (WhatsApp, Instagram, Facebook)
+- Customer Service opens WhatsApp instantly
+- No fake or hardcoded links
+- Works on mobile + desktop
+- Clean, premium ecommerce experience

@@ -21,6 +21,7 @@ import AuthPage from "./pages/AuthPage";
 import AdminPage from "./pages/AdminPage";
 import AdminAuthPage from "./pages/AdminAuthPage";
 import NotFound from "./pages/NotFound";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +64,7 @@ const App = () => (
               <DatabaseInitializer />
               <Toaster />
               <Sonner />
+              <FloatingWhatsApp />
               <AnimatedRoutes />
             </BrowserRouter>
           </WishlistProvider>
