@@ -1,0 +1,120 @@
+Fix and optimize my ecommerce website "Trending Cloths" to be fully production-ready so that after deployment on Netlify and connecting a custom domain, there are ZERO errors.
+
+🎯 GOAL:
+- No white screen
+- No admin login errors
+- No payment failures
+- No broken routes
+- Smooth performance on all devices
+- Production-level stability
+
+--------------------------------------------------
+
+🔍 1. FULL ERROR SCAN:
+- Scan all files (frontend + backend)
+- Fix all JavaScript errors
+- Fix undefined variables, broken imports
+- Remove console errors and warnings
+
+--------------------------------------------------
+
+⚙️ 2. BUILD & DEPLOY COMPATIBILITY:
+- Ensure project builds correctly using:
+  npm run build
+- Ensure output folder (dist/build) is correct
+- Fix all issues that break Netlify deployment
+
+--------------------------------------------------
+
+🌐 3. NETLIFY DEPLOY FIX (VERY IMPORTANT):
+- Ensure correct base path (for Vite: base = "/")
+- Fix asset paths (no broken CSS/JS/images)
+- Add fallback routing:
+  create _redirects file with:
+  /* /index.html 200
+
+--------------------------------------------------
+
+🔐 4. AUTHENTICATION FIX (CRITICAL):
+- Fix admin login/signup system
+- Ensure login works after deployment (not only locally)
+- Fix token/session storage issues
+- Ensure authentication works with custom domain
+- Prevent CORS or domain mismatch errors
+
+--------------------------------------------------
+
+🛍 5. PRODUCT & DATABASE SYSTEM:
+- Ensure products load correctly from database
+- Fix API calls (no 404 errors)
+- Ensure CRUD (Add/Edit/Delete) works in admin panel
+
+--------------------------------------------------
+
+💳 6. PAYMENT SYSTEM:
+- Ensure payment flow works correctly
+- No broken redirects after payment
+- Ensure success/failure handling works
+- Validate payment methods UI and logic
+
+--------------------------------------------------
+
+📦 7. API & ENVIRONMENT VARIABLES:
+- Move all API keys to environment variables
+- Ensure compatibility with Netlify environment
+- Replace hardcoded URLs with dynamic environment variables
+
+--------------------------------------------------
+
+🔗 8. DOMAIN COMPATIBILITY:
+- Ensure website works with custom domain
+- Fix any absolute URL issues
+- Ensure HTTPS compatibility
+- Fix mixed content errors
+
+--------------------------------------------------
+
+📱 9. RESPONSIVE & MOBILE TEST:
+- Ensure full mobile compatibility
+- Fix layout breaking on small screens
+- Ensure navbar, video, products work on mobile
+
+--------------------------------------------------
+
+🎥 10. HERO VIDEO STABILITY:
+- Ensure video always loads and autoplay works
+- Add fallback only if video fails
+- Fix mobile autoplay issues
+
+--------------------------------------------------
+
+⚡ 11. PERFORMANCE OPTIMIZATION:
+- Optimize images and videos
+- Remove unused code
+- Improve loading speed
+
+--------------------------------------------------
+
+🧪 12. FINAL TESTING:
+Simulate production environment:
+- Test login/logout
+- Test admin panel
+- Test product loading
+- Test payment
+- Test navigation
+
+--------------------------------------------------
+
+🚫 STRICT RULES:
+- Do NOT break existing UI design
+- Do NOT remove features
+- Only fix and optimize
+
+--------------------------------------------------
+
+🎯 FINAL RESULT:
+- Fully working website after Netlify deployment
+- No admin login error
+- No white screen
+- No API or routing issues
+- Smooth premium user experience

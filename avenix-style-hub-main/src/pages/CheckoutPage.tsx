@@ -39,9 +39,8 @@ const CheckoutPage = () => {
   const { data: paymentSettings } = useQuery({
     queryKey: ["payment-settings"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("payment_settings").select("*").limit(1).single();
-      if (error) throw error;
-      return data;
+      const { data } = await supabase.from("payment_settings").select("*").limit(1).maybeSingle();
+      return data ?? null;
     },
   });
 

@@ -62,7 +62,6 @@ export const useProducts = () =>
   useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
-    placeholderData: staticProducts,
   });
 
 export const useProductsByTag = (tag: string) => {
