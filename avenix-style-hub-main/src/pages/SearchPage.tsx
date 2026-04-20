@@ -15,12 +15,15 @@ import {
 } from "@/components/ui/sheet";
 
 const ALL_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
-const MAX_PRICE = 300;
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const { data: products, isLoading } = useProducts();
+
+  const MAX_PRICE = products && products.length > 0
+    ? Math.ceil(Math.max(...products.map((p) => p.price)) / 500) * 500
+    : 5000;
 
   const [query, setQuery] = useState(initialQuery);
   const [categories, setCategories] = useState<string[]>([]);
@@ -33,8 +36,15 @@ const SearchPage = () => {
   const clearFilters = () => { setCategories([]); setSizes([]); setPriceRange([0, MAX_PRICE]); setInStockOnly(false); };
 
   const filtered = useMemo(() => {
+    const q = query.toLowerCase().trim();
     return (products || []).filter((p) => {
-      if (query && !p.name.toLowerCase().includes(query.toLowerCase()) && !p.description.toLowerCase().includes(query.toLowerCase())) return false;
+      if (q) {
+        const matchesName = p.name.toLowerCase().includes(q);
+        const matchesDesc = p.description.toLowerCase().includes(q);
+        const matchesCategory = p.category.toLowerCase().includes(q);
+        const matchesTag = p.tag ? p.tag.toLowerCase().includes(q) : false;
+        if (!matchesName && !matchesDesc && !matchesCategory && !matchesTag) return false;
+      }
       if (categories.length > 0 && !categories.includes(p.category)) return false;
       if (sizes.length > 0 && !p.sizes.some((s) => sizes.includes(s))) return false;
       if (p.price < priceRange[0] || p.price > priceRange[1]) return false;

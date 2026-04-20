@@ -309,8 +309,8 @@ const AdminPage = () => {
                         onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
                         className="text-xs border border-border rounded-sm px-2 py-1 bg-background"
                       >
-                        {["pending", "confirmed", "shipped", "delivered", "cancelled"].map((s) => (
-                          <option key={s} value={s}>{s}</option>
+                        {["pending", "confirmed", "packed", "shipped", "out_for_delivery", "delivered", "cancelled"].map((s) => (
+                          <option key={s} value={s}>{s.replace(/_/g, " ")}</option>
                         ))}
                       </select>
                     </td>
